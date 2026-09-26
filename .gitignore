@@ -1,0 +1,25 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# OS artifacts
+.DS_Store
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Compressed archives
+*.tar.gz
+*.zip
+
+# Model checkpoints / trained artifacts
+code/business_entity_resolution/artifacts/*.joblib
+
+# Competition Outputs
+output/*.tsv
+
+# Large datasets (>100MB exceeds GitHub push limits)
+# If using Git LFS, remove dataset/ from here and configure git-lfs
+dataset/train/*.tsv
+dataset/test/*.tsv
