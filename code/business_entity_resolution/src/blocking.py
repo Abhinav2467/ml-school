@@ -50,7 +50,7 @@ def _tfidf_candidates(
     others: list[NormRecord],
     topk: int,
 ) -> dict[str, set[str]]:
-    if not s1 or not others:
+    if not s1 or not others or topk <= 0:
         return {}
     corpus_s1 = [f"{r.core} {r.addr}" for r in s1]
     corpus_o = [f"{r.core} {r.addr}" for r in others]

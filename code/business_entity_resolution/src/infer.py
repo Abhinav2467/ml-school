@@ -41,7 +41,9 @@ def main():
     others = {r.entity_id: r for r in s2 + s3}
 
     print(f"Loaded S1={len(s1)} S2={len(s2)} S3={len(s3)}")
+    print("Generating candidate pairs via inverted-index blocking...")
     cands = generate_candidates(list(s1.values()), s2, s3)
+    print(f"Generated candidate sets for {len(cands):,} S1 entities.")
 
     bundle = None
     threshold = args.threshold if args.threshold is not None else DEFAULT_THRESHOLD
@@ -55,9 +57,18 @@ def main():
         print("No trained model found — falling back to Jaro-Winkler core-name score.")
         model = None
 
-    match_rows, cand_rows = [], []
+    import time
+    t0 = time.time()
     s1_ids = list(sources["s1"]["entity_id"])
-    for sid in s1_ids:
+    total_s1 = len(s1_ids)
+    print(f"Scoring candidates across {total_s1:,} S1 records...")
+
+    match_rows, cand_rows = [], []
+    for idx, sid in enumerate(s1_ids):
+        if (idx + 1) % 50000 == 0 or (idx + 1) == total_s1:
+            elapsed = time.time() - t0
+            rate = (idx + 1) / max(elapsed, 0.001)
+            print(f"  Processed {idx + 1:,} / {total_s1:,} ({((idx + 1) / total_s1):.1%}) S1 records [{rate:.0f} rec/s, {elapsed / 60:.1f}m]")
         cand_ids = cands.get(sid, [])
         cand_rows.append({"source1_entity_id": sid, "candidate_entity_ids": format_id_list(cand_ids)})
         if not cand_ids:

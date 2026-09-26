@@ -12,7 +12,7 @@ OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 # Blocking
 MAX_CANDIDATES_PER_S1 = 80
-TFIDF_TOPK = 30
+TFIDF_TOPK = 0  # 0 disables dense n-gram matrix comparison (prevents OOM on large datasets)
 SAME_COUNTRY_ONLY_IN_BLOCK = True  # still keep country as a *feature*, not a frozen vocab
 
 # Matching
